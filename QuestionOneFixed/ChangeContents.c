@@ -14,7 +14,7 @@ void ChangeContents(char filePath[])
         char greeting[MAX_GREETING_LENGTH] = { 'H','e','l','l','o',',',' ', '\0' };
         char name[MAX_NAME_LENGTH] = { 0 };
         char exclamationMark[] = "!";
-        int readFromFile = fscanf_s(fp, "%s", name, sizeof(name));
+        int readFromFile = fscanf_s(fp, "%s", name, MAX_NAME_LENGTH);
         if (readFromFile == EOF)
         {
             printf_s("There has been an error reading file %s", filePath);
