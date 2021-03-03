@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include  "ChangeContents.h"
 
-int main()
+int main(void)
 {
     ChangeContents("C:\\NonExistingFolder\\file.txt");
     ChangeContents("C:\\Windows\\notepad.exe");
