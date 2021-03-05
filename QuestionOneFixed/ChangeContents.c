@@ -4,7 +4,14 @@
 #include <string.h>
 #include <stdlib.h>
 #include "ChangeContents.h"
-void ChangeContents(char filePath[])
+
+
+/**
+  * @file ChangeContents.h
+  */
+
+
+int ChangeContents(char filePath[])
 {
     FILE* fp;
     errno_t errorOpeningCode;
@@ -14,10 +21,11 @@ void ChangeContents(char filePath[])
         char greeting[MAX_GREETING_LENGTH] = { 'H','e','l','l','o',',',' ', '\0' };
         char name[MAX_NAME_LENGTH] = { 0 };
         char exclamationMark[] = "!";
-        int readFromFile = fscanf_s(fp, "%s", name, MAX_NAME_LENGTH);
-        if (readFromFile == EOF)
+        char *readingStatus = fgets(name, MAX_NAME_LENGTH, fp);
+        if (readingStatus == NULL) 
         {
             printf_s("There has been an error reading file %s", filePath);
+            return FAILED_OPERATION;
         }
         strcat_s(greeting, MAX_GREETING_LENGTH, name);
         strcat_s(greeting, MAX_GREETING_LENGTH, exclamationMark);
@@ -25,22 +33,22 @@ void ChangeContents(char filePath[])
         if (closeOperation == EOF)
         {
             printf_s("Failed to close file %s after reading from it", filePath);
-            exit(-1);
+            return FAILED_OPERATION;
         }
         errorOpeningCode = fopen_s(&fp, filePath, "w");
         if (fp != NULL)//checking success of opening file for writing "Hello,<name>!"
         {
-            int writeToFile = fprintf_s(fp, "%s", greeting);
-            if (writeToFile < 0)
+            int writeToFileStatus = fputs(greeting, fp);
+            if (writeToFileStatus == EOF) 
             {
                 printf_s("There has been an error writing to file: %s", filePath);
-                return;
+                return FAILED_OPERATION;
             }
             closeOperation = fclose(fp);
             if (closeOperation == EOF)
             {
                 printf_s("Failed to close file %s after writing to it", filePath);
-                exit(-1);
+                return FAILED_OPERATION;
             }
 
         }
@@ -49,7 +57,7 @@ void ChangeContents(char filePath[])
             char errorMessageBuffer[MAX_ERROR_MESSAGE_LENGTH];
             strerror_s(errorMessageBuffer, MAX_ERROR_MESSAGE_LENGTH, errorOpeningCode);
             printf_s("%s for writing to file with path: %s\n", errorMessageBuffer, filePath);
-            return;
+            return FAILED_OPERATION;
 
         }
     }
@@ -58,8 +66,8 @@ void ChangeContents(char filePath[])
         char errorMessageBuffer[MAX_ERROR_MESSAGE_LENGTH];
         strerror_s(errorMessageBuffer, MAX_ERROR_MESSAGE_LENGTH, errorOpeningCode);
         printf_s("%s for reading from file with path: %s\n", errorMessageBuffer, filePath);
-        return;
+        return FAILED_OPERATION;
     }
-    return;
+    return SUCCESSFUL_OPERATION;
 
 }
