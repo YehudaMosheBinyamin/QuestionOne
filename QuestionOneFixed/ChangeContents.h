@@ -15,7 +15,8 @@
 #endif
 /**
  * Function that receives a file path, reads a name from the file, and writes to the file the greeting "Hello,<name>!" 
- * @param  filePath
+ * Assumption: Maximum  name length in file is MAX_NAME_LENGTH bytes(including null byte) 
+ * @param  filePath - a full file path
  * @return If operation succeeds returns SUCCESSFUL_OPERATION, else returns FAILED_OPERATION
  * @attention In case of an error the function reports the error to the user in a user-friendly manner
  */

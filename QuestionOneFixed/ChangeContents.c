@@ -2,8 +2,7 @@
 #include "ChangeContents.h"
 #include <errno.h>
 #include <string.h>
-#include <stdlib.h>
-#include "ChangeContents.h"
+
 
 
 /**
@@ -13,10 +12,16 @@
 
 int ChangeContents(char filePath[])
 {
+    if (filePath == NULL)
+    {
+        return FAILED_OPERATION;
+    }
+
     FILE* fp;
     errno_t errorOpeningCode;
     errorOpeningCode = fopen_s(&fp, filePath, "r");
-    if (fp != NULL)//checking success of opening file for reading a name
+    //checking success of opening file for reading a name
+    if (fp != NULL)
     {
         char greeting[MAX_GREETING_LENGTH] = { 'H','e','l','l','o',',',' ', '\0' };
         char name[MAX_NAME_LENGTH] = { 0 };
@@ -36,7 +41,8 @@ int ChangeContents(char filePath[])
             return FAILED_OPERATION;
         }
         errorOpeningCode = fopen_s(&fp, filePath, "w");
-        if (fp != NULL)//checking success of opening file for writing "Hello,<name>!"
+        //checking success of opening file for writing "Hello,<name>!"
+        if (fp != NULL)
         {
             int writeToFileStatus = fputs(greeting, fp);
             if (writeToFileStatus == EOF) 
@@ -52,7 +58,8 @@ int ChangeContents(char filePath[])
             }
 
         }
-        else//opening file for writing failed 
+        //opening file for writing failed 
+        else
         {
             char errorMessageBuffer[MAX_ERROR_MESSAGE_LENGTH];
             strerror_s(errorMessageBuffer, MAX_ERROR_MESSAGE_LENGTH, errorOpeningCode);
@@ -61,7 +68,8 @@ int ChangeContents(char filePath[])
 
         }
     }
-    else//opening file for reading failed
+    //opening file for reading failed
+    else
     {
         char errorMessageBuffer[MAX_ERROR_MESSAGE_LENGTH];
         strerror_s(errorMessageBuffer, MAX_ERROR_MESSAGE_LENGTH, errorOpeningCode);
